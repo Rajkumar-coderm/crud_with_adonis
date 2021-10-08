@@ -5,11 +5,11 @@ import User from "App/Models/User";
 
 export default class UsersController {
     public async index() {
-        const data = await Database.from('users').select('*')
+        const data = await User.all()
         return data
     }
     public async store({ request, response }) {
-        await Database.insertQuery().table('users').insert(
+        await User.create(
             {
                 name: request.input('name'),
                 email: request.input('email'),
@@ -19,17 +19,14 @@ export default class UsersController {
     }
 
     public async update({ request, response, params }) {
-        await Database.from('users')
-            .where('id', params.id)
-            .update({ password: request.input('password') })
+        await User.query().where('id', params.id).update({ password: request.input('password') })
         return response.status(200).json({ message: "updated successfully in databases.." })
-
     }
+
     public async delete({ request, response, params }) {
-        await Database.from('users')
-            .where('id', params.id)
-            .delete()
-        return response.status(200).json({message:"user delete successfully"})
+        const user = await User.findOrFail(params.id)
+        await user.delete()
+        return response.status(200).json({ message: "user delete successfully" })
 
     }
 };
