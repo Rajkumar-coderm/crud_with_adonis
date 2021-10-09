@@ -9,6 +9,7 @@ export default class Users extends BaseSchema {
       table.string('name')
       table.string('email')
       table.string('password')
+      table.string('image')
 
       /**
        * Uses timestamptz for PostgreSQL and DATETIME2 for MSSQL
